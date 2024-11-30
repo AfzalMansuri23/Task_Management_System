@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Records</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-links">
+            <button onclick="location.href='/add'">Add Record</button>
+            <button onclick="location.href='/update'">Update Record</button>
+            <button onclick="location.href='/history'">Record History</button>
+        </div>
+        <div>
+            <input type="text" id="search" placeholder="Search records..." oninput="searchRecords()">
+        </div>
+    </nav>
+
+    <h1>Task Records</h1>
+
+    <!-- Dropdown to filter records by status -->
+    <div style="text-align: center; margin: 20px;">
+        <label for="statusFilter">Filter by Status:</label>
+        <select id="statusFilter" onchange="filterByStatus()">
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+        </select>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status Toggle</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Edit/Delete Record</th>
+            </tr>
+        </thead>
+        <tbody id="records-body">
+            {% for record in records %}
+            <tr>
+                <td>{{ record.id }}</td>
+                <td>{{ record.title }}</td>
+                <td>{{ record.description }}</td>
+                <td>
+                    <button class="toggle-button" onclick="toggleStatus({{ record.id }}, '{{ record.status }}')">
+                        {{ 'Mark as Completed' if record.status == 'Pending' else 'Mark as Pending' }}
+                    </button>
+                </td>
+                <td>{{ record.date }}</td>
+                <td id="status-{{ record.id }}">{{ record.status }}</td>
+                <td>
+                    <!-- Edit Icon -->
+                    <i class="edit-icon" onclick="editRecord({{ record.id }})" title="Edit Record">&#9998;</i> /
+                    <!-- Delete Icon -->
+                    <i class="delete-icon" onclick="softDelete({{ record.id }})" title="Delete Record">&#10060;</i>
+                </td>
+                
+            </tr>
+            {% else %}
+            <tr>
+                <td id="no_data" colspan="7">No records found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+<script src="/static/js/script.js"></script>
+</html>
