@@ -23,7 +23,7 @@ Clone the repository:
 
 bash
 Copy code
-git clone https://github.com/your-repository/financial-records.git
+git clone https://github.com/AfzalMansuri23/Task_Management_System
 cd financial-records
 Create a virtual environment:
 
