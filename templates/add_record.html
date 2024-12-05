@@ -6,12 +6,11 @@
     <title>Add Financial Record</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body>
     <nav>
         <div class="nav-links">
             <button onclick="location.href='/'">Home</button>
-            <button onclick="location.href='/history'">Records History</button>
             <button onclick="location.href='/update'">Update Record</button>
+            <button onclick="location.href='/history'">Record History</button>
         </div>
     </nav>
 
@@ -23,7 +22,7 @@
         <label for="description">Description:</label>
         <textarea id="description" name="description" placeholder="Enter description"></textarea>
 
-        <label for="date">Date (DD-MM-YYYY):</label>
+        <label for="date">Date (DD-MM-YYY):</label>
         <input type="date" id="date" name="date" required>
 
         <label for="status">Status:</label>
@@ -34,7 +33,45 @@
 
         <button type="submit">Add Record</button>
     </form>
+    
+    <script>
 
-     <script src="/static/js/script.js"></script>
-</body>
+document.getElementById('add-record-form').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const formData = {
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        date: document.getElementById('date').value,
+        status: document.getElementById('status').value
+    };
+
+    try {
+        const response = await fetch('/finance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
+
+        if (!response.ok) {
+            // Handle non-200 responses gracefully
+            const errorData = await response.json(); // Parse error response as JSON
+            alert(`Error: ${errorData.message || 'Something went wrong'}`);
+            return;
+        }
+
+        const data = await response.json(); // Parse success response as JSON
+        alert(data.message); // Show success message
+
+        if (response.ok) {
+            document.getElementById('add-record-form').reset();
+        }
+    } catch (error) {
+        console.error("Error:", error); // Log error for debugging
+        alert('An error occurred: ' + error.message);
+    }
+});
+</script>
 </html>

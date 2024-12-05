@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
+import os
 
 app = Flask(__name__)
 
@@ -52,7 +53,7 @@ def record_history():
 def get_financial_records():
     search_term = request.args.get('search', '')
     status_filter = request.args.get('status', '')
-    
+
     # Search and status filter logic
     records_query = FinanceRecord.query
     if search_term:
@@ -63,16 +64,18 @@ def get_financial_records():
     if status_filter:
         records_query = records_query.filter(FinanceRecord.status.ilike(f"%{status_filter}%"))
 
-
     # Fetch records that are not deleted
     records = records_query.filter_by(deleted=False).all()
 
-    # Return a list of records as JSON
+    if not records:
+        return jsonify({"message": "No data found"}), 404  # Always return JSON
+
+    # Return records as a JSON response
     records_list = [
         {"id": r.id, "title": r.title, "description": r.description, "date": r.date, "status": r.status}
         for r in records
     ]
-    return jsonify(records_list)
+    return jsonify(records_list), 200
 
 
 

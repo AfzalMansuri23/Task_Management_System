@@ -172,37 +172,6 @@ document.getElementById('update-record-form').addEventListener('submit', async f
         }
 )};
 
-
-// Function to handle the form submission and add a financial record
-async function addFinancialRecord(event) {
-    event.preventDefault();
-
-    // Gather form data
-    const formData = {
-        title: document.getElementById('title').value,
-        description: document.getElementById('description').value,
-        date: document.getElementById('date').value,
-        status: document.getElementById('status').value,
-    };
-
-    // Send data to the Flask API to add the financial record
-    const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-    });
-
-    const data = await response.json();
-    alert(data.message);  // Show success message or error
-    if (data.message === "Task record added successfully!") {
-        // Clear the form after successful submission
-        document.getElementById('add-record-form').reset();
-        fetchFinanceRecords();  // Refresh the financial records list
-    }
-}
-
 // Initial load of financial records when the page is opened
 document.addEventListener('DOMContentLoaded', fetchFinanceRecords);
 
