@@ -24,7 +24,7 @@ Clone the repository:
 bash
 Copy code
 git clone https://github.com/AfzalMansuri23/Task_Management_System
-cd financial-records
+cd finance
 Create a virtual environment:
 
 bash
